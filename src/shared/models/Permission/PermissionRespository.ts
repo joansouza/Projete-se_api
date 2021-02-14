@@ -1,5 +1,5 @@
-import { EntityRepository, Repository } from "typeorm";
-import Permission from ".";
+import { EntityRepository, Repository } from 'typeorm';
+import Permission from '.';
 
 @EntityRepository(Permission)
 class PermissionRespository extends Repository<Permission> {}

@@ -1,59 +1,44 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateFile1608238174395 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "File",
+        name: 'File',
         columns: [
           {
-            name: "id",
-            type: "uuid",
+            name: 'id',
+            type: 'uuid',
             isPrimary: true,
-            generationStrategy: "uuid",
-            default: "uuid_generate_v4()",
+            generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
-            name: "originalname",
-            type: "varchar",
+            name: 'originalname',
+            type: 'varchar',
           },
           {
-            name: "filename",
-            type: "varchar",
+            name: 'filename',
+            type: 'varchar',
             isUnique: true,
           },
           {
-            name: "ext",
-            type: "varchar",
+            name: 'ext',
+            type: 'varchar',
           },
           {
-            name: "isPublic",
-            type: "boolean",
-            default: false,
+            name: 'createdAt',
+            type: 'timestamp',
+            default: 'now()',
           },
           {
-            name: "checkUserPermissions",
-            type: "boolean",
-            default: false,
+            name: 'updatedAt',
+            type: 'timestamp',
+            default: 'now()',
           },
           {
-            name: "checkRoutePermissions",
-            type: "boolean",
-            default: false,
-          },
-          {
-            name: "createdAt",
-            type: "timestamp",
-            default: "now()",
-          },
-          {
-            name: "updatedAt",
-            type: "timestamp",
-            default: "now()",
-          },
-          {
-            name: "deletedAt",
-            type: "timestamp",
+            name: 'deletedAt',
+            type: 'timestamp',
             isNullable: true,
           },
         ],
@@ -62,6 +47,6 @@ export class CreateFile1608238174395 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("File");
+    await queryRunner.dropTable('File');
   }
 }

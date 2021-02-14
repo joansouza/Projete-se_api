@@ -7,16 +7,38 @@ import {
   DeleteDateColumn,
   ManyToOne,
   JoinColumn,
+  Unique,
   ManyToMany,
   JoinTable,
-} from "typeorm";
-import PermissionGroup from "../PermissionGroup";
-import Role from "../Role";
+  OneToMany,
+} from 'typeorm';
+import RoleGroup from '@models/RoleGroup';
+import PermissionOperation from '@models/PermissionOperation';
 
-@Entity("Permission")
+@Entity('Permission')
+@Unique('uniqueRouteNameRoleGroup', ['roleGroupId', 'routeName'])
+@Unique('uniqueNameRoleGroup', ['roleGroupId', 'name'])
 class Permission {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  roleGroupId: string;
+
+  @ManyToOne(() => RoleGroup)
+  @JoinColumn({ name: 'roleGroupId' })
+  roleGroup?: RoleGroup;
+
+  @Column()
+  permissionId: string;
+
+  @ManyToOne(() => Permission)
+  @JoinColumn({ name: 'permissionId' })
+  permission?: Permission;
+
+  @OneToMany(() => Permission, (permission) => permission.permissionId)
+  @JoinColumn({ name: 'permissionId' })
+  permissions?: Permission;
 
   @Column()
   name: string;
@@ -24,16 +46,16 @@ class Permission {
   @Column()
   routeName: string;
 
-  @Column()
-  secret?: string;
-
-  @ManyToMany(() => Role)
+  @ManyToMany(() => Permission)
   @JoinTable()
-  roles: Role[];
+  operations: Permission[];
 
-  @ManyToOne(() => PermissionGroup)
-  @JoinColumn({ name: "permissionGroupId" })
-  permissionGroup?: PermissionGroup;
+  @OneToMany(
+    () => PermissionOperation,
+    (permissionOperation) => permissionOperation.operationId
+  )
+  @JoinTable()
+  permissionOperations: Permission[];
 
   @CreateDateColumn()
   createdAt: Date;

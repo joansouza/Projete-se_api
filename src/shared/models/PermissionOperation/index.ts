@@ -1,32 +1,40 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany, JoinTable } from "typeorm";
-import Permission from "../Permission";
+import Operation from '@models/Operation';
+import Permission from '@models/Permission';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+  ManyToOne,
+  JoinColumn,
+  Unique,
+} from 'typeorm';
+import Role from '../Role';
 
-@Entity("PermissionOperation")
+@Entity('PermissionOperation')
+@Unique('uniquePermissionOperation', ['permissionId', 'operationId'])
 class PermissionOperation {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  name: string;
+  permissionId: string;
+
+  @ManyToOne(() => Permission)
+  @JoinColumn({ name: 'permissionId' })
+  permission?: Permission;
 
   @Column()
-  routeName?: string;
+  operationId: string;
 
-  @Column()
-  secret?: string;
+  @ManyToOne(() => Operation)
+  @JoinColumn({ name: 'operationId' })
+  operation?: Operation;
 
-  @ManyToMany(() => Permission)
+  @ManyToMany(() => Role)
   @JoinTable()
-  allowedRoutes: Permission[];
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
+  roles: Role[];
 }
 
 export default PermissionOperation;

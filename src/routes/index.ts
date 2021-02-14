@@ -1,12 +1,12 @@
 import { Router } from 'express';
+import signedRoutes from './signedRoutes';
+import unsignedRoutes from './unsignedRoutes';
 
-import openRoutes from './openRoutes';
-import userRoutes from './userRoutes';
 import userAuthenticationMiddleware from './_infra/middlewares/userAuthenticationMiddleware';
 
 const routes = Router();
 
-routes.use('/open', openRoutes);
-routes.use('/auth', userAuthenticationMiddleware, userRoutes);
+routes.use('/signed', userAuthenticationMiddleware, signedRoutes);
+routes.use(unsignedRoutes);
 
 export default routes;

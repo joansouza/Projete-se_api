@@ -1,64 +1,56 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+  TableUnique,
+} from 'typeorm';
 
 export class CreateUserRole1608238179600 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "UserRole",
+        name: 'UserRole',
         columns: [
           {
-            name: "id",
-            type: "uuid",
-            isPrimary: true,
-            generationStrategy: "uuid",
-            default: "uuid_generate_v4()",
+            name: 'roleId',
+            type: 'uuid',
           },
           {
-            name: "roleId",
-            type: "uuid",
-          },
-          {
-            name: "userId",
-            type: "uuid",
-          },
-          {
-            name: "createdAt",
-            type: "timestamp",
-            default: "now()",
-          },
-          {
-            name: "updatedAt",
-            type: "timestamp",
-            default: "now()",
-          },
-          {
-            name: "deletedAt",
-            type: "timestamp",
-            isNullable: true,
+            name: 'userId',
+            type: 'uuid',
           },
         ],
       })
     );
 
-    await queryRunner.createForeignKeys("UserRole", [
+    await queryRunner.createForeignKeys('UserRole', [
       new TableForeignKey({
-        columnNames: ["roleId"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "Role",
-        onDelete: "SET NULL",
-        onUpdate: "CASCADE",
+        columnNames: ['roleId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'Role',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
       }),
       new TableForeignKey({
-        columnNames: ["userId"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "User",
-        onDelete: "SET NULL",
-        onUpdate: "CASCADE",
+        columnNames: ['userId'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'User',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
       }),
     ]);
+
+    await queryRunner.createUniqueConstraint(
+      'UserRole',
+      new TableUnique({
+        columnNames: ['roleId', 'userId'],
+        name: 'uniqueUserRole',
+      })
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("UserRole");
+    await queryRunner.dropTable('UserRole');
   }
 }

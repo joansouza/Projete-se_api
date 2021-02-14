@@ -6,15 +6,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  ManyToMany,
-  JoinTable,
-} from "typeorm";
-import appConfig from "@config/appConfig";
-import User from "@models/User";
+} from 'typeorm';
+import appConfig from '@config/appConfig';
 
-@Entity("File")
+@Entity('File')
 class File {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -25,23 +22,6 @@ class File {
 
   @Column()
   ext: string;
-
-  @Column({ default: false })
-  isPublic: boolean;
-
-  @Column({ default: false })
-  checkUserPermissions: boolean;
-
-  @ManyToMany(() => User)
-  @JoinTable()
-  allowedUsers: User[];
-
-  @Column({ default: false })
-  checkRoutePermissions: boolean;
-
-  // @ManyToMany(() => User)
-  // @JoinTable()
-  // allowedRoutes: User[];
 
   @CreateDateColumn()
   createdAt: Date;

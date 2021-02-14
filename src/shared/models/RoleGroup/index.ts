@@ -5,22 +5,21 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  ManyToMany,
   JoinTable,
   OneToMany,
-} from "typeorm";
-import Permission from "../Permission";
-import Role from "../Role";
+} from 'typeorm';
+import Permission from '../Permission';
+import Role from '../Role';
 
-@Entity("RoleGroup")
+@Entity('RoleGroup')
 class RoleGroup {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   routeName: string;
 
   @Column()
@@ -28,9 +27,9 @@ class RoleGroup {
 
   @OneToMany(() => Role, (role) => role.roleGroupId)
   @JoinTable()
-  roles: Permission[];
+  roles: Role[];
 
-  @ManyToMany(() => Permission)
+  @OneToMany(() => Permission, (permission) => permission.roleGroupId)
   @JoinTable()
   permissions: Permission[];
 
