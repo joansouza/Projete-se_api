@@ -1,8 +1,8 @@
-import User from "../models/entities/User";
+import User from '../models/entities/User';
 
 declare global {
   namespace Express {
-    interface Request {
+    export interface Request {
       user: User;
     }
   }
