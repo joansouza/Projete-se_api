@@ -1,20 +1,10 @@
 import mockUtils from 'shared/utils/mockUtils';
-
-interface IUserSeed {
-  name?: string;
-  email?: string;
-  password?: string;
-  birthday?: string;
-  avatarId?: string;
-  cpf?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import { UserPropertiesType } from '../types';
 
 /**
  * password: "123qwe!@#"
  */
-function createUserMock(data: IUserSeed) {
+function createUserMock(data: UserPropertiesType) {
   const { fullName, name1, name2 } = mockUtils.getRandomName();
 
   return {

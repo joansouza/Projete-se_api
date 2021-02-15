@@ -1,4 +1,4 @@
-// import User from '@models/User';
+// import User from '@models/User/_UserEntity';
 
 interface IUserSeed {
   name: string;

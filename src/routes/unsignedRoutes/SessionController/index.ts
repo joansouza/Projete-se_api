@@ -1,19 +1,19 @@
-import { Request, Response } from "express";
-import { getCustomRepository } from "typeorm";
-import UserRepository from "@models/User/UserRepository";
+import { Request, Response } from 'express';
+import { getUserRepository } from '@models/User/repository';
+import AppError from '@errors/AppError';
 
 class SessionController {
   async store(req: Request, res: Response) {
     const { email, password } = req.body;
-    const userRep = getCustomRepository(UserRepository);
+    const userRep = getUserRepository();
 
     const user = await userRep.startSession(email, password);
 
-    if (user?.sessionData?.token) {
-      return res.json(user);
+    if (!user?.sessionData?.token) {
+      throw new AppError({ message: 'Email ou senha incorretos' });
     }
 
-    return res.status(404).json({ error: "User not found" });
+    return res.json(user);
   }
 }
 

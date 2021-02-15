@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { getCustomRepository, getManager } from 'typeorm';
 import AppError from '@errors/AppError';
-import User from '@models/User';
-import FileRespository from '@models/File/FileRespository';
-import UserRepository from '@models/User/UserRepository';
+import FileRespository from '@models/File/repository';
+import UserRepository from '@models/User/repository';
+import UserEntity from '@models/User/entity';
 
 class AvatarController {
   async update(req: Request, res: Response) {
@@ -18,7 +18,7 @@ class AvatarController {
         fileRep.createWithLocalFiles(req.file)?.[0];
 
       if (!avatar?.ext && !deleteAvatar) {
-        throw new AppError('File not found');
+        throw new AppError({ message: 'File not found' });
       }
 
       const oldAvatar = await fileRep.findOne(req?.user?.avatarId);
@@ -32,7 +32,7 @@ class AvatarController {
           await transactionalEntityManager.remove(oldAvatar);
         }
 
-        await transactionalEntityManager.save(User, [
+        await transactionalEntityManager.save(UserEntity, [
           { id: req.user.id, avatarId: avatar?.id || null },
         ]);
       });

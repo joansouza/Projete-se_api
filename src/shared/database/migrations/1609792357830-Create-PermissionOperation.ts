@@ -53,7 +53,7 @@ export class CreatePermissionOperation1609792357820
       'PermissionOperation',
       new TableUnique({
         columnNames: ['permissionId', 'operationId'],
-        name: 'uniquePermissionOperation',
+        name: 'PermissionOperation_unique_permissionId_operationId',
       })
     );
   }

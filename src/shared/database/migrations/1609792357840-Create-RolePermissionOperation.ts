@@ -3,6 +3,7 @@ import {
   QueryRunner,
   Table,
   TableForeignKey,
+  TableUnique,
 } from 'typeorm';
 
 export class CreateRolePermissionOperation1609792357840
@@ -13,11 +14,11 @@ export class CreateRolePermissionOperation1609792357840
         name: 'RolePermissionOperation',
         columns: [
           {
-            name: 'rolePermissionId',
+            name: 'roleId',
             type: 'uuid',
           },
           {
-            name: 'operationId',
+            name: 'permissionOperationId',
             type: 'uuid',
           },
         ],
@@ -26,20 +27,28 @@ export class CreateRolePermissionOperation1609792357840
 
     await queryRunner.createForeignKeys('RolePermissionOperation', [
       new TableForeignKey({
-        columnNames: ['rolePermissionId'],
+        columnNames: ['roleId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'RolePermission',
+        referencedTableName: 'Role',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       }),
       new TableForeignKey({
-        columnNames: ['operationId'],
+        columnNames: ['permissionOperationId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'Operation',
+        referencedTableName: 'PermissionOperation',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       }),
     ]);
+
+    await queryRunner.createUniqueConstraint(
+      'RolePermissionOperation',
+      new TableUnique({
+        columnNames: ['roleId', 'permissionOperationId'],
+        name: 'PermissionOperation_unique_roleId_permissionOperationId',
+      })
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

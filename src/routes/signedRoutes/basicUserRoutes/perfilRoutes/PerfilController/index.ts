@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
-import { getCustomRepository } from "typeorm";
-import AppError from "@errors/AppError";
-import UserRepository from "@models/User/UserRepository";
+import { Request, Response } from 'express';
+import AppError from '@errors/AppError';
+import { getUserRepository } from '@models/User/repository';
 
 class PerfilController {
   async show(req: Request, res: Response) {
@@ -11,10 +10,10 @@ class PerfilController {
   async update(req: Request, res: Response) {
     const { id, avatarId, password, ...rest } = req.body;
     const { user } = req;
-    const userRep = getCustomRepository(UserRepository);
+    const userRep = getUserRepository();
 
     if (!user?.id) {
-      throw new AppError("User not found", { statusCod: 404 });
+      throw new AppError({ message: 'User not found', statusCod: 404 });
     }
 
     Object.assign(user, rest);

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import signedRoutes from './signedRoutes';
 import unsignedRoutes from './unsignedRoutes';
 
-import userAuthenticationMiddleware from './_infra/middlewares/userAuthenticationMiddleware';
+import userAuthenticationMiddleware from '@middlewares/userAuthenticationMiddleware';
 
 const routes = Router();
 

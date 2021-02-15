@@ -73,14 +73,14 @@ export class CreatePermissions1609792357751 implements MigrationInterface {
       }),
     ]);
 
-    await queryRunner.createUniqueConstraints('RoleGroupPermission', [
+    await queryRunner.createUniqueConstraints('Permission', [
       new TableUnique({
         columnNames: ['roleGroupId', 'name'],
-        name: 'uniqueNameRoleGroup',
+        name: 'Permission_unique_roleGroupId_name',
       }),
       new TableUnique({
         columnNames: ['roleGroupId', 'routeName'],
-        name: 'uniqueRouteNameRoleGroup',
+        name: 'Permission_unique_roleGroupId_routeName',
       }),
     ]);
   }

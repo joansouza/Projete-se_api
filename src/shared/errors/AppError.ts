@@ -1,4 +1,5 @@
 interface IAppError {
+  message?: string;
   statusCod?: number;
   userFriendly?: boolean;
 }
@@ -10,8 +11,12 @@ class AppError {
 
   public readonly userFriendly?: boolean;
 
-  constructor(message: string, options?: IAppError) {
-    const { statusCod = 400, userFriendly = false } = options || {};
+  constructor(options?: IAppError) {
+    const {
+      message = 'An unexpected error has occurred.',
+      statusCod = 400,
+      userFriendly = false,
+    } = options || {};
 
     this.message = message;
     this.statusCod = statusCod;

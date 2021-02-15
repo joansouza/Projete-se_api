@@ -62,7 +62,7 @@ export class CreateRole1608238179550 implements MigrationInterface {
       'Role',
       new TableUnique({
         columnNames: ['roleGroupId', 'name'],
-        name: 'uniqueNameRoleGroup',
+        name: 'Role_unique_roleGroupId_name',
       })
     );
   }
