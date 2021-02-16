@@ -1,4 +1,4 @@
-import _getRandomName, { _getRandomNameType } from './_getRandomName';
+import _getRandomName, { _getRandomNameType } from '../_getRandomName';
 
 export type _getRandomEmailType = _getRandomNameType & { emailDomain?: string };
 

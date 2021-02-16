@@ -1,7 +1,4 @@
-function cpfValidator(
-  cpfToVerify: string | number,
-  throwError?: boolean | string
-) {
+function cpfValidator(cpfToVerify: string, throwError?: boolean | string) {
   let cpf = `${cpfToVerify}`;
   cpf = cpf?.replace(/\D+/g, '');
 

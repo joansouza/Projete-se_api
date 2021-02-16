@@ -1,13 +1,13 @@
 import _maskUtilsHandleValue, {
   _maskUtilsValueType,
-} from '../utils/_maskUtilsHandleValue';
+} from '../../utils/_maskUtilsHandleValue';
 import _maskUtilsHandleOptions, {
   _maskUtilsDefaultOptionsType,
-} from '../utils/_maskUtilsHandleOptions';
+} from '../../utils/_maskUtilsHandleOptions';
 
 function _handleSetOnlyNumberRegex(
   value: _maskUtilsValueType,
-  options: _maskUtilsDefaultOptionsType
+  options?: _maskUtilsDefaultOptionsType
 ) {
   let v = _maskUtilsHandleValue(value);
 

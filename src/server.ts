@@ -28,6 +28,7 @@ app.use('/files', express.static(uploadConfig.storagePath));
 
 app.use((err: Error, _req: Request, res: Response) => {
   if (err instanceof AppError) {
+    console.error(err);
     try {
       return res.status(err.statusCod).json({
         status: 'error',
@@ -35,16 +36,12 @@ app.use((err: Error, _req: Request, res: Response) => {
         userFriendly: err?.userFriendly,
       });
     } catch {
-      // empty
+      return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      });
     }
   }
-
-  console.error(err);
-
-  return res.status(500).json({
-    status: 'error',
-    message: 'Internal server error',
-  });
 });
 
 app.listen(3333, () => console.log('Server running listening to port 3333'));

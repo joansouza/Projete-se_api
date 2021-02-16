@@ -1,8 +1,8 @@
-export type qwe = {
+export type getRandomCPFOptions = {
   masked?: boolean;
 };
 
-function _getRandomCPF(options?: qwe) {
+function _getRandomCPF(options?: getRandomCPFOptions) {
   const { masked } = options || {};
 
   function mod(dividendo: number) {

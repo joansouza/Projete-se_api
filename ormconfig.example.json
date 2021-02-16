@@ -1,13 +1,30 @@
-{
-  "type": "",
-  "host": "",
-  "port": "",
-  "username": "",
-  "password": "",
-  "database": "",
-  "entities": ["./src/shared/models/*/entity/index.ts"],
-  "migrations": ["./src/shared/database/migrations/*.ts"],
-  "cli": {
-    "migrationsDir": "./src/shared/database/migrations"
+[
+  {
+    "name": "default",
+    "type": "postgres",
+    "host": "localhost",
+    "port": "5432",
+    "username": "postgres",
+    "password": "123qwe!@#",
+    "database": "projetese",
+    "entities": ["./src/shared/models/*/entity/index.ts"],
+    "migrations": ["./src/shared/database/migrations/*.ts"],
+    "cli": {
+      "migrationsDir": "./src/shared/database/migrations"
+    }
+  },
+  {
+    "name": "test",
+    "type": "postgres",
+    "host": "localhost",
+    "port": "5432",
+    "username": "postgres",
+    "password": "123qwe!@#",
+    "database": "projetese_teste",
+    "entities": ["./src/shared/models/*/entity/index.ts"],
+    "migrations": ["./src/shared/database/migrations/*.ts"],
+    "cli": {
+      "migrationsDir": "./src/shared/database/migrations"
+    }
   }
-}
+]

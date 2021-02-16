@@ -1,4 +1,9 @@
-import { EntityRepository, Repository, FindManyOptions } from 'typeorm';
+import {
+  EntityRepository,
+  Repository,
+  FindManyOptions,
+  getCustomRepository,
+} from 'typeorm';
 import path from 'path';
 import FileEntity from '../entity';
 import AppError from '@errors/AppError';
@@ -120,3 +125,7 @@ class FileRespository extends Repository<FileEntity> {
 }
 
 export default FileRespository;
+
+export function getFileRespository() {
+  return getCustomRepository(FileRespository);
+}

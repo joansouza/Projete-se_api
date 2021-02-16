@@ -4,7 +4,7 @@ export type _maskUtilsDefaultOptionsType = {
 
 function _maskUtilsHandleOptions(
   newValue: string,
-  options: _maskUtilsDefaultOptionsType
+  options?: _maskUtilsDefaultOptionsType
 ) {
   const { maxLength } = options || {};
 

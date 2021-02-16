@@ -31,7 +31,7 @@ class Country {
   numCode: number;
 
   @Column()
-  phonecode: number;
+  phoneCode: number;
 
   @OneToMany(() => UserEntity, (permission) => permission.countryId)
   @JoinTable()
