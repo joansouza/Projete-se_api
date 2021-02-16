@@ -14,9 +14,14 @@ type CEP = {
 };
 
 async function requestCEP(cep: string | number): Promise<CEP> {
-  return axios
-    .get(`https://viacep.com.br/ws/${cep}/json/`)
-    .then((e) => (typeof e?.data === 'object' ? e.data : {}));
+  return axios.get(`https://viacep.com.br/ws/${cep}/json/`).then((e) => {
+    let result = {} as CEP;
+    if (e && e.data) {
+      result = { ...e.data };
+    }
+
+    return result;
+  });
 }
 
 export default requestCEP;

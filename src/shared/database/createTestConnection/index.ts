@@ -27,6 +27,12 @@ async function createTestConnection() {
   afterAll?.(async () => {
     const connection = getConnection();
 
+    await connection?.close();
+  });
+
+  afterEach(async () => {
+    const connection = getConnection();
+
     if (connection.options.database === databaseName) {
       const entities = connection.entityMetadatas;
 
@@ -43,8 +49,6 @@ async function createTestConnection() {
         }
       }
     }
-
-    await connection?.close?.();
   });
 }
 
