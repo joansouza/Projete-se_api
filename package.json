@@ -8,6 +8,9 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "start": "ts-node src/index.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "createSeed": "typeorm migration:create -d src/shared/database/seeds -n",
+    "runSeed": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -c seeds",
+    "test:runSeed": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -c seedsTest",
     "lint": "eslint src",
     "test": "jest"
   },

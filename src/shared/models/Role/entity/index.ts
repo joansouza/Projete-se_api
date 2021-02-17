@@ -31,11 +31,20 @@ class RoleEntity {
   @JoinColumn({ name: 'roleGroupId' })
   roleGroup?: RoleGroupEntity;
 
-  @ManyToMany(() => UserEntity)
+  @ManyToMany(() => UserEntity, (userEntity) => userEntity.roles)
   @JoinTable()
+  @JoinTable({
+    name: 'UserRole',
+  })
   users: UserEntity[];
 
-  @ManyToMany(() => PermissionOperationEntity)
+  @ManyToMany(
+    () => PermissionOperationEntity,
+    (permissionOperationEntity) => permissionOperationEntity.roles
+  )
+  @JoinTable({
+    name: 'RolePermissionOperation',
+  })
   @JoinTable()
   permissionOperations: PermissionOperationEntity[];
 

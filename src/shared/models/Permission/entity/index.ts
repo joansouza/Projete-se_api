@@ -14,6 +14,7 @@ import {
 } from 'typeorm';
 import RoleGroupEntity from '@models/RoleGroup/entity';
 import PermissionOperationEntity from '@models/PermissionOperation/entity';
+import Operation from '@models/Operation/entity';
 
 @Entity('Permission')
 @Unique('Permission_unique_roleGroupId_name', ['roleGroupId', 'name'])
@@ -30,7 +31,7 @@ class Permission {
   roleGroup?: RoleGroupEntity;
 
   @Column()
-  permissionId: string;
+  permissionId?: string;
 
   @ManyToOne(() => Permission)
   @JoinColumn({ name: 'permissionId' })
@@ -46,16 +47,17 @@ class Permission {
   @Column()
   routeName: string;
 
-  @ManyToMany(() => Permission)
-  @JoinTable()
-  operations: Permission[];
+  @ManyToMany(() => Operation, (operation) => operation.permissions)
+  operations: Operation[];
 
   @OneToMany(
     () => PermissionOperationEntity,
     (permissionOperation) => permissionOperation.operationId
   )
-  @JoinTable()
-  permissionOperations: Permission[];
+  @JoinTable({
+    name: 'PermissionOperation',
+  })
+  permissionOperations: PermissionOperationEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

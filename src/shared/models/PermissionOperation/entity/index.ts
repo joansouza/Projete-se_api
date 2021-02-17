@@ -35,8 +35,10 @@ class PermissionOperation {
   @JoinColumn({ name: 'operationId' })
   operation?: OperationEntity;
 
-  @ManyToMany(() => RoleEntity)
-  @JoinTable()
+  @ManyToMany(() => RoleEntity, (roleEntity) => roleEntity.permissionOperations)
+  @JoinTable({
+    name: 'RolePermissionOperation',
+  })
   roles: RoleEntity[];
 }
 

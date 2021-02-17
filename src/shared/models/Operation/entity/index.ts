@@ -26,8 +26,13 @@ class Operation {
   @Column({ nullable: true })
   secret?: string;
 
-  @ManyToMany(() => PermissionEntity)
-  @JoinTable()
+  @ManyToMany(
+    () => PermissionEntity,
+    (permissionEntity) => permissionEntity.operations
+  )
+  @JoinTable({
+    name: 'PermissionOperation',
+  })
   permissions: PermissionEntity[];
 
   @OneToMany(
@@ -35,7 +40,7 @@ class Operation {
     (permissionOperation) => permissionOperation.operationId
   )
   @JoinTable()
-  permissionOperations: PermissionEntity[];
+  permissionOperations: PermissionOperationEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

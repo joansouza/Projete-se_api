@@ -25,6 +25,7 @@ export class CreatePermissions1609792357751 implements MigrationInterface {
           },
           {
             name: 'permissionId',
+            isNullable: true,
             type: 'uuid',
           },
           {

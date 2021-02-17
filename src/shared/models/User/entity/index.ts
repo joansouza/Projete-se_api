@@ -39,8 +39,10 @@ class UserEntity {
   @Column({ type: 'json' })
   sessionData: UserSessionFieldType;
 
-  @ManyToMany(() => RoleEntity)
-  @JoinTable()
+  @ManyToMany(() => RoleEntity, (roleEntity) => roleEntity.users)
+  @JoinTable({
+    name: 'UserRole',
+  })
   roles: RoleEntity[];
 
   @Column()
