@@ -1,8 +1,8 @@
 import { EntityRepository, getCustomRepository, Repository } from 'typeorm';
-import OperationEntity from '../entity';
+import Operation from '../entity';
 
-@EntityRepository(OperationEntity)
-class OperationRespository extends Repository<OperationEntity> {}
+@EntityRepository(Operation)
+class OperationRespository extends Repository<Operation> {}
 
 export default OperationRespository;
 

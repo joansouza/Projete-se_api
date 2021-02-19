@@ -4,17 +4,17 @@ import AvatarController from './AvatarController';
 import PasswordController from './PasswordController';
 import PerfilController from './PerfilController';
 
-const perfilRoutes = Router();
+const userPerfilRoutes = Router();
 
-perfilRoutes.get('/', PerfilController.show);
-perfilRoutes.put('/', PerfilController.update);
+userPerfilRoutes.get('/user', PerfilController.show);
+userPerfilRoutes.put('/user', PerfilController.update);
 
-perfilRoutes.put(
-  '/avatar',
+userPerfilRoutes.put(
+  '/userAvatar',
   uploaderMiddleware({ imageOnly: true }).single('file'),
   AvatarController.update
 );
 
-perfilRoutes.put('/password', PasswordController.update);
+userPerfilRoutes.put('/userPassword', PasswordController.update);
 
-export default perfilRoutes;
+export default userPerfilRoutes;

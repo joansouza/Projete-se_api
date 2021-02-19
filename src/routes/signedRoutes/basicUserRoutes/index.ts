@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import perfilRoutes from './perfilRoutes';
+import userPerfilRoutes from './userPerfilRoutes';
 
-const userRoutes = Router();
+const basicUserRoutes = Router();
 
-userRoutes.use('/perfil', perfilRoutes);
+basicUserRoutes.use(userPerfilRoutes);
 
-export default userRoutes;
+export default basicUserRoutes;

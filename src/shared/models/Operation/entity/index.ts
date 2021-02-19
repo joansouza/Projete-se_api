@@ -1,4 +1,6 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -20,16 +22,16 @@ class Operation {
   @Column({ unique: true })
   name: string;
 
-  @Column({ nullable: true })
+  @Column()
   method?: string;
+
+  @Column()
+  requireId?: boolean;
 
   @Column({ nullable: true })
   secret?: string;
 
-  @ManyToMany(
-    () => PermissionEntity,
-    (permissionEntity) => permissionEntity.operations
-  )
+  @ManyToMany(() => PermissionEntity)
   @JoinTable({
     name: 'PermissionOperation',
   })
@@ -37,9 +39,9 @@ class Operation {
 
   @OneToMany(
     () => PermissionOperationEntity,
-    (permissionOperation) => permissionOperation.operationId
+    (permissionOperation) => permissionOperation.operation
   )
-  @JoinTable()
+  // @JoinTable()
   permissionOperations: PermissionOperationEntity[];
 
   @CreateDateColumn()
@@ -50,6 +52,14 @@ class Operation {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private async setMethod() {
+    if (this.method) {
+      this.method = this.method.toUpperCase();
+    }
+  }
 }
 
 export default Operation;

@@ -9,23 +9,28 @@ async function migrateOperations(transaction: EntityManager) {
   const operations = operationRepository.create([
     {
       name: 'View all',
-      method: 'get',
+      method: 'GET',
+      requireId: false,
     },
     {
       name: 'View one',
-      method: 'get',
+      method: 'GET',
+      requireId: true,
     },
     {
       name: 'Create',
-      method: 'post',
+      method: 'POST',
+      requireId: false,
     },
     {
       name: 'Update',
-      method: 'put',
+      method: 'PUT',
+      requireId: false,
     },
     {
       name: 'Delete',
-      method: 'delete',
+      method: 'DELETE',
+      requireId: false,
     },
   ]);
 

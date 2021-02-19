@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableUnique } from 'typeorm';
 
 export class CreateOperation1609792357820 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -21,7 +21,10 @@ export class CreateOperation1609792357820 implements MigrationInterface {
           {
             name: 'method',
             type: 'varchar',
-            isNullable: true,
+          },
+          {
+            name: 'requireId',
+            type: 'boolean',
           },
           {
             name: 'secret',
@@ -47,6 +50,13 @@ export class CreateOperation1609792357820 implements MigrationInterface {
         ],
       })
     );
+
+    await queryRunner.createUniqueConstraints('Operation', [
+      new TableUnique({
+        columnNames: ['method', 'requireId'],
+        name: 'Operation_unique_method_requireId',
+      }),
+    ]);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

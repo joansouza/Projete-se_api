@@ -1,14 +1,20 @@
+import RoleEntity from '@models/Role/entity';
 import { getRoleRespository } from '@models/Role/repository';
+import getPermissions from '../getPermissions';
 
-async function getRolePermissions(roleId: string) {
-  const roleRepository = getRoleRespository();
+async function getRoleWithPermissions(roleId: typeof RoleEntity.prototype.id) {
+  const roleRespository = getRoleRespository();
 
-  const role = await roleRepository.findOne({
+  const role = await roleRespository.findOne({
     where: { id: roleId },
-    relations: ['roleGroup'],
+    relations: ['roleGroup', 'permissionOperations'],
   });
+
+  if (role?.roleGroupId && role.permissionOperations) {
+    role.permissions = await getPermissions(role);
+  }
 
   return role;
 }
 
-export default getRolePermissions;
+export default getRoleWithPermissions;

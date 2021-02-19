@@ -14,6 +14,7 @@ import {
 import UserEntity from '@models/User/entity';
 import PermissionOperationEntity from '@models/PermissionOperation/entity';
 import RoleGroupEntity from '@models/RoleGroup/entity';
+import Permission from '@models/Permission/entity';
 
 @Entity('Role')
 @Unique('Role_unique_roleGroupId_name', ['roleGroupId', 'name'])
@@ -27,7 +28,7 @@ class RoleEntity {
   @Column()
   roleGroupId: string;
 
-  @ManyToOne(() => RoleGroupEntity)
+  @ManyToOne(() => RoleGroupEntity, (roleGroupEntity) => roleGroupEntity.roles)
   @JoinColumn({ name: 'roleGroupId' })
   roleGroup?: RoleGroupEntity;
 
@@ -45,7 +46,6 @@ class RoleEntity {
   @JoinTable({
     name: 'RolePermissionOperation',
   })
-  @JoinTable()
   permissionOperations: PermissionOperationEntity[];
 
   @CreateDateColumn()
@@ -56,6 +56,8 @@ class RoleEntity {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  permissions?: Permission[];
 }
 
 export default RoleEntity;

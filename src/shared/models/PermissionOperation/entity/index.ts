@@ -24,15 +24,21 @@ class PermissionOperation {
   @Column()
   permissionId: string;
 
-  @ManyToOne(() => PermissionEntity)
-  @JoinColumn({ name: 'permissionId' })
+  @ManyToOne(
+    () => PermissionEntity,
+    (permissionEntity) => permissionEntity.permissionOperations
+  )
+  // @JoinColumn({ name: 'permissionId' })
   permission?: PermissionEntity;
 
   @Column()
   operationId: string;
 
-  @ManyToOne(() => OperationEntity)
-  @JoinColumn({ name: 'operationId' })
+  @ManyToOne(
+    () => OperationEntity,
+    (operationEntity) => operationEntity.permissionOperations
+  )
+  // @JoinColumn({ name: 'operationId' })
   operation?: OperationEntity;
 
   @ManyToMany(() => RoleEntity, (roleEntity) => roleEntity.permissionOperations)

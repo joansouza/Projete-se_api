@@ -29,7 +29,7 @@ class RoleGroupEntity {
   @JoinTable()
   roles: RoleEntity[];
 
-  @OneToMany(() => PermissionEntity, (permission) => permission.roleGroupId)
+  @OneToMany(() => PermissionEntity, (permission) => permission.roleGroup)
   @JoinTable()
   permissions: PermissionEntity[];
 

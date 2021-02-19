@@ -1,5 +1,5 @@
 import { OperationPropertiesType } from '@models/Operation/types';
-import { PermissionOperationPropertiesType } from '@models/PermissionOperation/types';
+import PermissionOperationRespository from '@models/PermissionOperation/repository';
 import RoleRespository from '@models/Role/repository';
 import { EntityManager } from 'typeorm';
 import migratePermissions from './migratePermissions';
@@ -14,12 +14,27 @@ async function migrateAdminRoles(
     roleGroupId,
     operations
   );
-  let permissionOperations: PermissionOperationPropertiesType[] = [];
+  const permissionOperationsWhereClause: {
+    operationId: string;
+    permissionId: string;
+  }[] = [];
+
   permissions.forEach((p) => {
-    if (Array.isArray(p.permissionOperations)) {
-      permissionOperations = [...p.permissionOperations];
-    }
+    const { operations, id: permissionId } = p || {};
+    operations?.forEach((o) => {
+      const operationId = o?.id;
+      if (operationId && permissionId) {
+        permissionOperationsWhereClause.push({ operationId, permissionId });
+      }
+    });
   });
+
+  const permissionOperations =
+    permissionOperationsWhereClause.length > 0
+      ? await transaction
+          .getCustomRepository(PermissionOperationRespository)
+          .find({ where: permissionOperationsWhereClause })
+      : [];
 
   const roleRepository = transaction.getCustomRepository(RoleRespository);
 

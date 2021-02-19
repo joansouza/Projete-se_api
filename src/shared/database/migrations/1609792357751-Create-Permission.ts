@@ -24,11 +24,6 @@ export class CreatePermissions1609792357751 implements MigrationInterface {
             type: 'uuid',
           },
           {
-            name: 'permissionId',
-            isNullable: true,
-            type: 'uuid',
-          },
-          {
             name: 'name',
             type: 'varchar',
             // comment: "Friendly name for the permission",
@@ -62,13 +57,6 @@ export class CreatePermissions1609792357751 implements MigrationInterface {
         columnNames: ['roleGroupId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'RoleGroup',
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE',
-      }),
-      new TableForeignKey({
-        columnNames: ['permissionId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'Permission',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       }),

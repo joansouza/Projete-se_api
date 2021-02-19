@@ -26,20 +26,12 @@ class Permission {
   @Column()
   roleGroupId: string;
 
-  @ManyToOne(() => RoleGroupEntity)
+  @ManyToOne(
+    () => RoleGroupEntity,
+    (roleGroupEntity) => roleGroupEntity.permissions
+  )
   @JoinColumn({ name: 'roleGroupId' })
   roleGroup?: RoleGroupEntity;
-
-  @Column()
-  permissionId?: string;
-
-  @ManyToOne(() => Permission)
-  @JoinColumn({ name: 'permissionId' })
-  permission?: Permission;
-
-  @OneToMany(() => Permission, (permission) => permission.permissionId)
-  @JoinColumn({ name: 'permissionId' })
-  permissions?: Permission;
 
   @Column()
   name: string;
@@ -47,16 +39,16 @@ class Permission {
   @Column()
   routeName: string;
 
-  @ManyToMany(() => Operation, (operation) => operation.permissions)
+  @ManyToMany(() => Operation)
+  @JoinTable({
+    name: 'PermissionOperation',
+  })
   operations: Operation[];
 
   @OneToMany(
     () => PermissionOperationEntity,
-    (permissionOperation) => permissionOperation.operationId
+    (permissionOperation) => permissionOperation.permission
   )
-  @JoinTable({
-    name: 'PermissionOperation',
-  })
   permissionOperations: PermissionOperationEntity[];
 
   @CreateDateColumn()

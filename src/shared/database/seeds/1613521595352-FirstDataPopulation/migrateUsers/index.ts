@@ -1,10 +1,14 @@
+import RoleEntity from '@models/Role/entity';
 import UserRepository from '@models/User/repository';
 import createUserMock from '@models/User/utils/createUserMock';
 import { EntityManager } from 'typeorm';
-import migrateRoleBasedAccessControl from './migrateRoleBasedAccessControl';
 
-async function migrateUsers(transaction: EntityManager) {
-  const roles = await migrateRoleBasedAccessControl(transaction);
+type dataType = {
+  roles: RoleEntity[];
+};
+
+async function migrateUsers(transaction: EntityManager, data: dataType) {
+  const { roles } = data;
 
   const userRepository = transaction.getCustomRepository(UserRepository);
 
