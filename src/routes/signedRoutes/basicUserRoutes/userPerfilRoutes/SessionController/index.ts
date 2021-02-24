@@ -1,25 +1,31 @@
 import { Request, Response } from 'express';
 import { getUserRepository } from '@models/User/repository';
 import AppError from '@errors/AppError';
+import destroyClientSession from '@services/destroyClientSession';
 
 class SessionController {
-  async store(req: Request, res: Response) {
-    const { email, password } = req.body;
+  async update(req: Request, res: Response) {
     const userRep = getUserRepository();
 
-    const user = await userRep.startSession(res, { email, password });
+    const user = req.user;
+    user.updateSession(res);
     const { clientToken, serverToken } = user?.sessionData || {};
 
-    if (!user || !clientToken || !serverToken) {
+    if (!clientToken || !serverToken) {
       throw new AppError({
-        message: 'Email ou senha incorretos',
-        statusCod: 404,
+        message: 'Não foi possível criar os tokens de validação',
       });
     }
 
     await userRep.save(user);
 
     return res.json(user);
+  }
+
+  async destroy(req: Request, res: Response) {
+    destroyClientSession(res);
+
+    return res.json({ message: 'Session destroyed' });
   }
 }
 

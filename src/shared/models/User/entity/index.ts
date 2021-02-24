@@ -23,6 +23,7 @@ import StateEntity from '@models/State/entity';
 import CityEntity from '@models/City/entity';
 import DistrictEntity from '@models/District/entity';
 import { UserSessionFieldType } from '../types';
+import { Response } from 'express';
 
 @Entity('User')
 /** Avoid using global typeorm repository on thisEntity */
@@ -126,14 +127,44 @@ class UserEntity {
     }
   }
 
-  updateSession() {
+  updateSession(response: Response, options?: { noClientToken?: boolean }) {
     const loginDate = new Date().getTime();
 
-    const token = sign({ loginDate }, authConfig.secretKey, {
-      subject: this.id,
-    });
+    // const expires = new Date();
+    // expires.setTime(expires.getTime() + 1 * 24 * 60 * 60 * 1000);
+    function createCookie(isServer: boolean, token: string) {
+      response.cookie(isServer ? 'serverToken' : 'clientToken', token, {
+        httpOnly: isServer,
+        sameSite: true,
+        // expires,
+        path: '/',
+      });
+    }
 
-    this.sessionData = { loginDate, token };
+    if (!options?.noClientToken) {
+      const clientToken = sign(
+        { loginDate, isClientToken: true },
+        authConfig.secretKey,
+        {
+          subject: this.id,
+        }
+      );
+
+      createCookie(false, clientToken);
+
+      this.sessionData = { ...this.sessionData, clientToken };
+    }
+
+    const serverToken = sign(
+      { loginDate, isServerToken: true },
+      authConfig.secretKey,
+      {
+        subject: this.id,
+      }
+    );
+    createCookie(true, serverToken);
+
+    this.sessionData = { ...this.sessionData, serverToken };
   }
 }
 

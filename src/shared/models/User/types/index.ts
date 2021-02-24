@@ -4,6 +4,6 @@ import { DeepPartial } from 'typeorm';
 export type UserPropertiesType = DeepPartial<UserEntity>;
 
 export type UserSessionFieldType = {
-  loginDate: number;
-  token: string;
+  serverToken: string;
+  clientToken: string;
 };

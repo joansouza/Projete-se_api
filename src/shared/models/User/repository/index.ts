@@ -1,12 +1,13 @@
 import { EntityRepository, Repository, getCustomRepository } from 'typeorm';
 import UserEntity from '../entity';
 import bcrypt from 'bcryptjs';
+import { Response } from 'express';
 
 @EntityRepository(UserEntity)
 class UserRepository extends Repository<UserEntity> {
   async startSession(
-    email: string,
-    password: string
+    response: Response,
+    { email, password }: { email: string; password: string }
   ): Promise<UserEntity | undefined> {
     const select: any = this.metadata.columns.map((e) => e.propertyName);
 
@@ -19,9 +20,7 @@ class UserRepository extends Repository<UserEntity> {
     ) {
       delete user.password;
 
-      user.updateSession();
-
-      await this.save(user);
+      user.updateSession(response);
 
       return user;
     }

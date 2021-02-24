@@ -9,22 +9,20 @@ class PerfilController {
 
   async update(req: Request, res: Response) {
     const { id, avatarId, password, ...rest } = req.body;
-    const { user } = req;
+
     const userRep = getUserRepository();
 
-    if (!user?.id) {
+    if (!req?.user?.id) {
       throw new AppError({ message: 'User not found', statusCod: 404 });
     }
 
-    Object.assign(user, rest);
+    await userRep.save(Object.assign({}, req.user, rest));
 
-    await userRep.save(user);
+    const user = await userRep.findOne(req.user.id);
 
-    const refreshUser = await userRep.findOne(user.id);
+    delete user?.password;
 
-    delete refreshUser?.password;
-
-    return res.json(refreshUser || user);
+    return res.json(user);
   }
 }
 

@@ -4,6 +4,7 @@ import { getUserRepository } from '@models/User/repository';
 import authConfig from '@config/authConfig';
 import AppError from '@errors/AppError';
 import { validate as validateUUID } from 'uuid';
+import destroyClientSession from '@services/destroyClientSession';
 
 interface TokenPayload {
   iat: number;
@@ -16,37 +17,41 @@ async function userAuthenticationMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  const { method, originalUrl } = req;
-  const paths = originalUrl.split('/');
-  const roleGroupRouteName = paths?.[2];
-  const permissionRouteName = paths?.[3];
-  const operationId = paths?.[4];
-
-  if (
-    paths?.[1] !== 'signed' ||
-    !permissionRouteName ||
-    paths?.[5] ||
-    (operationId && !validateUUID(operationId))
-  ) {
-    throw new AppError({
-      message: 'O path informado possui dados inválidos.',
-      statusCod: 400,
-    });
-  }
-
-  // const { updateSession } = req.query;
-  const { authorization } = req.headers;
-
-  if (!authorization) {
-    return res.status(400).json({ error: 'JWT token is missing' });
-  }
-
-  const token = authorization?.split(' ')?.[1];
-
   try {
-    const decoded = verify(token, authConfig.secretKey);
+    const { method, originalUrl } = req;
+    const paths = originalUrl.split('/');
+    const roleGroupRouteName = paths?.[2];
+    const permissionRouteName = paths?.[3];
+    const operationId = paths?.[4];
 
-    const { sub } = decoded as TokenPayload;
+    if (
+      paths?.[1] !== 'signed' ||
+      !permissionRouteName ||
+      paths?.[5] ||
+      (operationId && !validateUUID(operationId))
+    ) {
+      throw new AppError({
+        message: 'O path informado possui dados inválidos.',
+        statusCod: 400,
+      });
+    }
+
+    const clientToken = req.cookies?.clientToken;
+    const serverToken = req.cookies?.serverToken;
+
+    if (!clientToken || !serverToken) {
+      throw new Error();
+    }
+
+    const decodedClientToken = verify(clientToken, authConfig.secretKey);
+    const decodedServerToken = verify(serverToken, authConfig.secretKey);
+
+    const { sub: clientTokenId } = decodedClientToken as TokenPayload;
+    const { sub: serverTokenId } = decodedServerToken as TokenPayload;
+
+    if (clientTokenId !== serverTokenId) {
+      throw new Error();
+    }
 
     const userRepository = getUserRepository();
 
@@ -75,25 +80,23 @@ async function userAuthenticationMiddleware(
         }
       )
       .where({
-        id: sub,
+        id: serverTokenId,
       })
       .getOne();
 
-    const validToken = user?.sessionData?.token === token;
+    const { clientToken: cT, serverToken: sT } = user?.sessionData || {};
+
+    const validToken = clientToken === cT && serverToken === sT;
 
     if (!user?.id || !validToken) {
       throw new Error();
     }
 
-    // if (updateSession === 'true') {
-    //   user.updateSession();
-    //   await userRepository.save(user);
-    // }
-
     req.user = user;
 
     return next();
   } catch {
+    destroyClientSession(res);
     throw new AppError({ message: 'Invalid JWT token', statusCod: 400 });
   }
 }

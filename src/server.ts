@@ -2,6 +2,7 @@ import 'dotenv';
 import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import cookierParser from 'cookie-parser';
 import helmet from 'helmet';
 import 'express-async-errors';
 
@@ -16,11 +17,14 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CORS_URL,
+    origin: 'http://localhost:3000',
+    // origin: process.env.CORS_URL,
+    credentials: true,
   })
 );
 
 app.use(express.json());
+app.use(cookierParser());
 
 app.use(routes);
 

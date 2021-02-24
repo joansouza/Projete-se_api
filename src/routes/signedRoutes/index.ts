@@ -3,6 +3,6 @@ import basicUserRoutes from './basicUserRoutes';
 
 const signedRoutes = Router();
 
-signedRoutes.use('basicUser', basicUserRoutes);
+signedRoutes.use('/basicUser', basicUserRoutes);
 
 export default signedRoutes;
