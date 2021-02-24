@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import basicUserRoutes from './basicUserRoutes';
+import defaultRoutes from './defaultRoutes';
 
 const signedRoutes = Router();
 
-signedRoutes.use('/basicUser', basicUserRoutes);
+signedRoutes.use('/default', defaultRoutes);
 
 export default signedRoutes;

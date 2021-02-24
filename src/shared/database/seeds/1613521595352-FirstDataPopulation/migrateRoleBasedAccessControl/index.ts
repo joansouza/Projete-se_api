@@ -1,6 +1,7 @@
 import RoleGroupRespository from '@models/RoleGroup/repository';
 import { EntityManager } from 'typeorm';
 import migrateAdminRoles from './migrateAdminRoles';
+import migrateDefaultRoles from './migrateDefaultRoles';
 import migrateOperations from './migrateOperations';
 
 async function migrateRoleBasedAccessControl(transaction: EntityManager) {
@@ -15,11 +16,25 @@ async function migrateRoleBasedAccessControl(transaction: EntityManager) {
     routeName: 'admin',
   });
 
-  await roleGroupRepository.save([adminGroup]);
+  const defaultGroup = roleGroupRepository.create({
+    name: 'Default',
+    routeName: 'default',
+  });
 
-  const roles = await migrateAdminRoles(transaction, adminGroup.id, operations);
+  await roleGroupRepository.save([adminGroup, defaultGroup]);
 
-  return roles;
+  const adminRoles = await migrateAdminRoles(
+    transaction,
+    adminGroup.id,
+    operations
+  );
+  const defaultRoles = await migrateDefaultRoles(
+    transaction,
+    defaultGroup.id,
+    operations
+  );
+
+  return [...adminRoles, ...defaultRoles];
 }
 
 export default migrateRoleBasedAccessControl;

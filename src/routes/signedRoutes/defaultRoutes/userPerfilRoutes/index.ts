@@ -7,18 +7,18 @@ import SessionController from './SessionController';
 
 const userPerfilRoutes = Router();
 
-userPerfilRoutes.get('/user', PerfilController.show);
-userPerfilRoutes.put('/user', PerfilController.update);
+userPerfilRoutes.get('/meuPerfil', PerfilController.show);
+userPerfilRoutes.put('/meuPerfil', PerfilController.update);
 
-userPerfilRoutes.put('/session', SessionController.update);
-userPerfilRoutes.delete('/session', SessionController.destroy);
+userPerfilRoutes.put('/minhaSessao', SessionController.update);
+userPerfilRoutes.delete('/minhaSessao', SessionController.destroy);
 
 userPerfilRoutes.put(
-  '/userAvatar',
+  '/meuAvatar',
   uploaderMiddleware({ imageOnly: true }).single('file'),
   AvatarController.update
 );
 
-userPerfilRoutes.put('/userPassword', PasswordController.update);
+userPerfilRoutes.put('/meuPassword', PasswordController.update);
 
 export default userPerfilRoutes;
