@@ -20,14 +20,14 @@ async function userAuthenticationMiddleware(
   try {
     const { method, originalUrl } = req;
     const paths = originalUrl.split('/');
-    const roleGroupRouteName = paths?.[2];
-    const permissionRouteName = paths?.[3];
-    const operationId = paths?.[4];
+    // const roleGroupRouteName = paths?.[2];
+    const permissionRouteName = paths?.[2];
+    const operationId = paths?.[3];
 
     if (
       paths?.[1] !== 'signed' ||
       !permissionRouteName ||
-      paths?.[5] ||
+      paths?.[4] ||
       (operationId && !validateUUID(operationId))
     ) {
       throw new AppError({
@@ -58,20 +58,36 @@ async function userAuthenticationMiddleware(
     const user = await userRepository
       .createQueryBuilder('user')
       .innerJoin('user.roles', 'role')
+      // .innerJoin(
+      //   'role.roleGroup',
+      //   'roleGroup',
+      //   'roleGroup.routeName = :roleGroupRouteName',
+      //   { roleGroupRouteName }
+      // )
+      // .innerJoin(
+      //   'roleGroup.permissions',
+      //   'permission',
+      //   'permission.routeName = :permissionRouteName',
+      //   { permissionRouteName }
+      // )
+      // .innerJoin(
+      //   'permission.operations',
+      //   'operation',
+      //   'operation.method = :method AND operation.requireId = :requireId',
+      //   {
+      //     method,
+      //     requireId: operationId ? true : false,
+      //   }
+      // )
+      .innerJoin('role.permissionOperations', 'permissionOperations')
       .innerJoin(
-        'role.roleGroup',
-        'roleGroup',
-        'roleGroup.routeName = :roleGroupRouteName',
-        { roleGroupRouteName }
-      )
-      .innerJoin(
-        'roleGroup.permissions',
+        'permissionOperations.permission',
         'permission',
-        'permission.routeName = :permissionRouteName',
+        'permission.routeName = :permissionRouteName AND permission.roleGroupId = role.roleGroupId',
         { permissionRouteName }
       )
       .innerJoin(
-        'permission.operations',
+        'permissionOperations.operation',
         'operation',
         'operation.method = :method AND operation.requireId = :requireId',
         {

@@ -3,6 +3,6 @@ import defaultRoutes from './defaultRoutes';
 
 const signedRoutes = Router();
 
-signedRoutes.use('/default', defaultRoutes);
+signedRoutes.use(defaultRoutes);
 
 export default signedRoutes;
