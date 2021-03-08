@@ -18,6 +18,7 @@
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     // Erros do prettier mostraram apenas como warning.
-    "prettier/prettier": "warn"
+    "prettier/prettier": ["warn", { "endOfLine": "crlf" }]
+
   }
 }
