@@ -8,9 +8,28 @@
     "password": "postgres",
     "database": "projetese",
     "entities": ["./src/shared/models/*/entity/index.ts"],
-    "migrations": ["./src/shared/database/migrations/*.ts"],
+    "migrations": [
+      "./src/shared/database/migrations/*.ts"
+    ],
     "cli": {
       "migrationsDir": "./src/shared/database/migrations"
+    }
+  },
+  {
+    "name": "seeds",
+    "type": "postgres",
+    "host": "localhost",
+    "port": "5432",
+    "username": "postgres",
+    "password": "postgres",
+    "database": "projetese",
+    "entities": ["./src/shared/models/*/entity/index.ts"],
+    "migrations": [
+      "./src/shared/database/seeds/*.ts",
+      "./src/shared/database/seeds/*/index.ts"
+    ],
+    "cli": {
+      "migrationsDir": "./src/shared/database/seeds"
     }
   },
   {
@@ -27,6 +46,25 @@
     "migrations": ["./src/shared/database/migrations/*.ts"],
     "cli": {
       "migrationsDir": "./src/shared/database/migrations"
+    }
+  },
+  {
+    "name": "seedsTest",
+    "type": "postgres",
+    "host": "localhost",
+    "port": "5432",
+    "username": "postgres",
+    "password": "postgres",
+    "database": "projetese_teste",
+    "logging": false,
+    "migrationsRun": true,
+    "entities": ["./src/shared/models/*/entity/index.ts"],
+    "migrations": [
+      "./src/shared/database/seeds/*.ts",
+      "./src/shared/database/seeds/*/index.ts"
+    ],
+    "cli": {
+      "migrationsDir": "./src/shared/database/seeds"
     }
   }
 ]

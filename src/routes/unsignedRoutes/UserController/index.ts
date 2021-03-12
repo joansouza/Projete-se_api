@@ -13,6 +13,7 @@ class UserController {
     if (!user) {
       throw new AppError({ message: 'Error on user creation' });
     }
+
     await userRep.save(user);
 
     delete user.password;

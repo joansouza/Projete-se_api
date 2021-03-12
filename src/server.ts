@@ -40,6 +40,11 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
         message: err.message,
         userFriendly: err?.userFriendly,
       });
+    } else {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      });
     }
   } catch {
     return res.status(500).json({

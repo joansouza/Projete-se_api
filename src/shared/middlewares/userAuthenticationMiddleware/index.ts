@@ -58,27 +58,6 @@ async function userAuthenticationMiddleware(
     const user = await userRepository
       .createQueryBuilder('user')
       .innerJoin('user.roles', 'role')
-      // .innerJoin(
-      //   'role.roleGroup',
-      //   'roleGroup',
-      //   'roleGroup.routeName = :roleGroupRouteName',
-      //   { roleGroupRouteName }
-      // )
-      // .innerJoin(
-      //   'roleGroup.permissions',
-      //   'permission',
-      //   'permission.routeName = :permissionRouteName',
-      //   { permissionRouteName }
-      // )
-      // .innerJoin(
-      //   'permission.operations',
-      //   'operation',
-      //   'operation.method = :method AND operation.requireId = :requireId',
-      //   {
-      //     method,
-      //     requireId: operationId ? true : false,
-      //   }
-      // )
       .innerJoin('role.permissionOperations', 'permissionOperations')
       .innerJoin(
         'permissionOperations.permission',
