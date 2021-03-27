@@ -32,6 +32,8 @@ async function createUserMock(
     stateId: stateIdProp,
     cityId: cityIdProp,
     districtId: districtIdProp,
+    address = 'Rua São José',
+    addressNumber = '123',
     /**
      * password: "123qwe!@#"
      * Utilize o size abaixo com 8 saltos para gerar uma senha criptografada.
@@ -123,6 +125,8 @@ async function createUserMock(
     name: thisName,
     zipCode,
     districtName,
+    address,
+    addressNumber,
     ...rest,
     createdAt: new Date(),
     updatedAt: new Date(),

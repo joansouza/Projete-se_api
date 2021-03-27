@@ -12,9 +12,10 @@ import {
 } from 'typeorm';
 import UserEntity from '@models/User/entity';
 import StateEntity from '@models/State/entity';
+import District from '@models/District/entity';
 
 @Entity('City')
-class City {
+class CityEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -34,6 +35,10 @@ class City {
   @JoinColumn({ name: 'stateId' })
   state?: StateEntity;
 
+  @OneToMany(() => District, (district) => district.cityId)
+  @JoinTable()
+  districts: District[];
+
   @OneToMany(() => UserEntity, (permission) => permission.cityId)
   @JoinTable()
   users: UserEntity[];
@@ -48,4 +53,4 @@ class City {
   deletedAt: Date;
 }
 
-export default City;
+export default CityEntity;

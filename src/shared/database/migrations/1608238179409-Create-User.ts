@@ -55,11 +55,19 @@ export class CreateUser1608238179409 implements MigrationInterface {
             name: 'cpf',
             type: 'varchar',
             isNullable: true,
+            isUnique: true,
+          },
+          {
+            name: 'address',
+            type: 'varchar',
+          },
+          {
+            name: 'addressNumber',
+            type: 'varchar',
           },
           {
             name: 'zipCode',
             type: 'varchar',
-            isNullable: true,
           },
           {
             name: 'countryId',
@@ -69,12 +77,10 @@ export class CreateUser1608238179409 implements MigrationInterface {
           {
             name: 'stateId',
             type: 'uuid',
-            isNullable: true,
           },
           {
             name: 'cityId',
             type: 'uuid',
-            isNullable: true,
           },
           {
             name: 'districtId',
@@ -84,7 +90,6 @@ export class CreateUser1608238179409 implements MigrationInterface {
           {
             name: 'districtName',
             type: 'varchar',
-            isNullable: true,
           },
 
           // Default table fields

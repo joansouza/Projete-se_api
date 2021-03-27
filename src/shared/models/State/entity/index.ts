@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import UserEntity from '@models/User/entity';
+import CityEntity from '@models/City/entity';
 import RegionEntity from '@models/Region/entity';
 import CountryEntity from '@models/Country/entity';
 
@@ -28,6 +29,10 @@ class StateEntity {
   @Column({ unique: true, length: 2 })
   ibgeCode: string;
 
+  @OneToMany(() => CityEntity, (city) => city.stateId)
+  @JoinTable()
+  cities?: CityEntity[];
+
   @Column()
   regionId: string;
 
@@ -42,7 +47,7 @@ class StateEntity {
   @JoinColumn({ name: 'countryId' })
   country?: CountryEntity;
 
-  @OneToMany(() => UserEntity, (permission) => permission.stateId)
+  @OneToMany(() => UserEntity, (user) => user.stateId)
   @JoinTable()
   users: UserEntity[];
 

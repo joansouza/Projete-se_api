@@ -1,5 +1,6 @@
 import AppError from '@errors/AppError';
 import { getUserRepository } from '@models/User/repository';
+import maskUtils from '@utils/maskUtils';
 import { Request, Response } from 'express';
 
 class UserController {
@@ -8,11 +9,27 @@ class UserController {
 
     const userRep = getUserRepository();
 
-    const user = userRep.create(userData);
+    const checkUser = await userRep.findOne({
+      where: [
+        { email: userData?.email },
+        { cpf: maskUtils.setOnlyNumber(userData?.cpf) },
+      ],
+    });
 
-    if (!user) {
-      throw new AppError({ message: 'Error on user creation' });
+    if (checkUser?.id) {
+      const sameEmail = checkUser?.email === userData?.email;
+      const message = `Já existe um usuário com esse ${
+        sameEmail ? 'email' : 'cpf'
+      }`;
+
+      throw new AppError({
+        message,
+        statusCod: 400,
+        userFriendly: true,
+      });
     }
+
+    const user = userRep.create(userData);
 
     await userRep.save(user);
 

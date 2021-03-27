@@ -1,11 +1,8 @@
-function cpfValidator(cpfToVerify: string, throwError?: boolean | string) {
+function cpfValidator(cpfToVerify?: string, throwError?: boolean | string) {
   let cpf = `${cpfToVerify}`;
   cpf = cpf?.replace(/\D+/g, '');
 
-  if (
-    Object.prototype.toString.call(cpf) === '[object String]' &&
-    cpf.length === 11
-  ) {
+  if (cpf.length === 11) {
     if (
       cpf === '00000000000' ||
       cpf === '11111111111' ||

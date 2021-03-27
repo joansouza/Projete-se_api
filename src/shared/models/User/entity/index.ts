@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   AfterLoad,
   BeforeInsert,
@@ -24,6 +25,13 @@ import CityEntity from '@models/City/entity';
 import DistrictEntity from '@models/District/entity';
 import { UserSessionFieldType } from '../types';
 import { Response } from 'express';
+import cpfValidator from 'shared/validators/cpfValidator';
+import AppError from '@errors/AppError';
+import emailValidator from 'shared/validators/emailValidator';
+import passwordValidator from 'shared/validators/passwordValidator';
+import maskUtils from '@utils/maskUtils';
+import { getCityRespository } from '@models/City/repository';
+import { getStateRespository } from '@models/State/repository';
 
 @Entity('User')
 /** Avoid using global typeorm repository on thisEntity */
@@ -61,6 +69,12 @@ class UserEntity {
 
   @Column()
   cpf?: string;
+
+  @Column()
+  address?: string;
+
+  @Column()
+  addressNumber?: string;
 
   @Column()
   zipCode?: string;
@@ -117,13 +131,77 @@ class UserEntity {
 
   @BeforeInsert()
   @BeforeUpdate()
-  private async hashPassword() {
+  private async handlePassword() {
     const loadedPassword = Object.getOwnPropertyDescriptor(
       this,
       '_loadedPassword'
     )?.value;
     if (this.password && this.password !== loadedPassword) {
+      const passwordCheck = passwordValidator(this?.password);
+      if (!passwordCheck.isValid) {
+        throw new AppError({
+          message: passwordCheck.invalidMessage,
+          statusCod: 400,
+          userFriendly: true,
+        });
+      }
       this.password = await bcrypt.hash(this.password, 8);
+    }
+  }
+
+  @BeforeInsert()
+  private async newUserValidation() {
+    this.countryId = undefined;
+    this.zipCode = maskUtils.setOnlyNumber(this.zipCode);
+    this.cpf = maskUtils.setOnlyNumber(this.cpf);
+
+    let message: string | undefined = undefined;
+
+    function validLength(data: any, size: number, exact?: boolean) {
+      return typeof data === 'string' && exact
+        ? data.length === size
+        : data.length >= size;
+    }
+
+    const stateRepository = getStateRespository();
+    const cityRepository = getCityRespository();
+    const state =
+      this?.stateId &&
+      (await stateRepository
+        .findOne({ where: { id: this?.stateId } })
+        .catch(() => undefined));
+    const city =
+      this?.cityId &&
+      (await cityRepository
+        .findOne({ where: { id: this?.cityId } })
+        .catch(() => undefined));
+
+    const thisDate = new Date();
+    thisDate.setFullYear(thisDate.getFullYear() - 16);
+    const idadeMinima = thisDate.getTime();
+    const nascimento = this?.birthday && new Date(this.birthday).getTime();
+
+    console.log(this.zipCode);
+    if (!nascimento || nascimento > idadeMinima)
+      message = 'É preciso ter pelo menos 16 anos.';
+    else if (!cpfValidator(this?.cpf)) message = 'CPF inválido.';
+    else if (!emailValidator(this?.email)) message = 'Email inválido.';
+    else if (!validLength(this?.name, 3))
+      message = 'O nome precisa ter pelo menos 3 caracteres.';
+    else if (!validLength(this.zipCode, 8, true))
+      message = 'O CEP deve ter 8 dígitos.';
+    else if (!state) message = 'Informe o estado.';
+    else if (!city) message = 'Informe a cidade.';
+    else if (!this?.districtName) message = 'Informe o bairro.';
+    else if (!this?.address) message = 'Informe o endereço.';
+    else if (!this?.addressNumber) message = 'Informe o número do endereço.';
+
+    if (message) {
+      throw new AppError({
+        message,
+        statusCod: 400,
+        userFriendly: true,
+      });
     }
   }
 
