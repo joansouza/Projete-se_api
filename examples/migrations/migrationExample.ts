@@ -1,18 +1,15 @@
-/* eslint-disable prettier/prettier */
+/**
+ * Crie usando o comando `yarn typeorm migration:create -n  Create-NomeTable`
+ * Altere o `NomeTabela` para o nome de sua nova tabela usando CamelCase.
+ * O código abaixo é o exemplo de propriedades que devem existir.
+ */
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-
-
-export class CreateProposta1615157098467 implements MigrationInterface {
-
+export class CreateTableName1618517802410 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-
     await queryRunner.createTable(
-
       new Table({
-
-        name: 'Proposta',
-
+        name: 'TableName',
         columns: [
           {
             name: 'id',
@@ -21,51 +18,16 @@ export class CreateProposta1615157098467 implements MigrationInterface {
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
           },
-
-          {
-            name: 'valueProposal',
-            type: 'varchar',
-          },
-
-          {
-            name: 'deadLine',
-            type: 'varchar',
-          },
-
-          {
-            name: 'email',
-            type: 'varchar',
-          },
-
-          {
-            name: 'phone',
-            type: 'varchar',
-          },
-
-          {
-            name: 'phoneTwo',
-            type: 'varchar',
-          },
-
-          {
-            name: 'optionalInfo',
-            type: 'varchar',
-          },
-
           {
             name: 'createdAt',
             type: 'timestamp',
             default: 'now()',
-
           },
-
           {
             name: 'updatedAt',
             type: 'timestamp',
             default: 'now()',
-
           },
-
           {
             name: 'deletedAt',
             type: 'timestamp',
@@ -76,11 +38,7 @@ export class CreateProposta1615157098467 implements MigrationInterface {
     );
   }
 
-
-
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('Proposta');
+    await queryRunner.dropTable('TableName');
   }
-
 }
-

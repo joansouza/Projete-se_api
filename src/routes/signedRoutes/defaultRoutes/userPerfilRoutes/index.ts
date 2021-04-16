@@ -4,6 +4,7 @@ import AvatarController from './AvatarController';
 import PasswordController from './PasswordController';
 import PerfilController from './PerfilController';
 import SessionController from './SessionController';
+import UserRatingController from './UserRatingController';
 
 const userPerfilRoutes = Router();
 
@@ -20,5 +21,7 @@ userPerfilRoutes.put(
 );
 
 userPerfilRoutes.put('/meuPassword', PasswordController.update);
+
+userPerfilRoutes.put('/userRating', UserRatingController.store);
 
 export default userPerfilRoutes;

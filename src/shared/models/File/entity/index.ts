@@ -4,13 +4,16 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import appConfig from '@config/appConfig';
+import ProjectEntity from '@models/Project/entity';
+import AdvertisementEntity from '@models/Advertisement/entity';
 
 @Entity('File')
-class File {
+class FileEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -22,6 +25,21 @@ class File {
 
   @Column()
   ext: string;
+
+  @OneToMany(() => ProjectEntity, (projectEntity) => projectEntity.imageCover)
+  projects: ProjectEntity[];
+
+  @OneToMany(
+    () => AdvertisementEntity,
+    (advertisement) => advertisement.imageCover
+  )
+  advertisementImageCovers: AdvertisementEntity[];
+
+  @OneToMany(
+    () => AdvertisementEntity,
+    (advertisement) => advertisement.imageLogo
+  )
+  advertisementImageLogos: AdvertisementEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
@@ -40,4 +58,4 @@ class File {
   }
 }
 
-export default File;
+export default FileEntity;

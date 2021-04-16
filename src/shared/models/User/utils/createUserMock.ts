@@ -40,7 +40,6 @@ async function createUserMock(
      * https://bcrypt-generator.com/
      */
     password = '$2y$08$DhiikOQJ7.2xaIJacbeCsO3GxywjHKgVOz.I7gC63vkoHv8GHeCHq',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ...rest
   } = userData || {};
 

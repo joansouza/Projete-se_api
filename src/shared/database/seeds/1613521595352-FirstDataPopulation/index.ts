@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import migrateProjectCategories from './migrateProjectCategories';
 import migrateRoleBasedAccessControl from './migrateRoleBasedAccessControl';
 import migrateUsers from './migrateUsers';
 
@@ -9,9 +9,12 @@ export class FirstDataPopulation1613521595352 implements MigrationInterface {
       const roles = await migrateRoleBasedAccessControl(transaction);
 
       await migrateUsers(transaction, { roles });
+
+      await migrateProjectCategories(transaction);
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async down(queryRunner: QueryRunner): Promise<void> {
     // Do nothing
   }

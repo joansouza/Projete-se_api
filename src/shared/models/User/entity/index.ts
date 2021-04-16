@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   AfterLoad,
   BeforeInsert,
@@ -11,6 +10,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -32,6 +32,10 @@ import passwordValidator from 'shared/validators/passwordValidator';
 import maskUtils from '@utils/maskUtils';
 import { getCityRespository } from '@models/City/repository';
 import { getStateRespository } from '@models/State/repository';
+import ProjectProposalEntity from '@models/ProjectProposal/entity';
+import ProjectEntity from '@models/Project/entity';
+import UserRatingEntity from '@models/UserRating/entity';
+import AdvertisementEntity from '@models/Advertisement/entity';
 
 @Entity('User')
 /** Avoid using global typeorm repository on thisEntity */
@@ -48,11 +52,29 @@ class UserEntity {
   @Column({ type: 'json' })
   sessionData: UserSessionFieldType;
 
-  @ManyToMany(() => RoleEntity, (roleEntity) => roleEntity.users)
+  @ManyToMany(() => RoleEntity, (role) => role.users)
   @JoinTable({
     name: 'UserRole',
   })
   roles: RoleEntity[];
+
+  @OneToMany(() => ProjectEntity, (project) => project.user)
+  projects: ProjectEntity[];
+
+  @OneToMany(
+    () => ProjectProposalEntity,
+    (projectProposal) => projectProposal.user
+  )
+  projectProposals: ProjectProposalEntity[];
+
+  @OneToMany(() => UserRatingEntity, (userRating) => userRating.ratedUser)
+  userRatings: UserRatingEntity[];
+
+  @OneToMany(() => UserRatingEntity, (userRating) => userRating.userEvaluator)
+  userEvaluations: UserRatingEntity[];
+
+  @OneToMany(() => AdvertisementEntity, (advertisement) => advertisement.user)
+  advertisements: AdvertisementEntity[];
 
   @Column()
   avatarId?: string;
